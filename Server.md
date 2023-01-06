@@ -18,8 +18,8 @@ To prevent interruption of scripts, needrestart setting needs to be changed to a
 `git clone https://github.com/Big-Vi/wagtail-ansible-terraform.git .`
 
 Activate virtualenv
-`virtualenv /var/www/html/env`
-`source /var/www/html/env/bin/activate`
+`virtualenv env`
+`source /env/bin/activate`
 
 `pip install uwsgi`
 
@@ -29,8 +29,9 @@ Activate virtualenv
   
 Inline DB until it replaced with AWS RDS
 
-`python manage.py migrate`
+`python manage.py migrate`  
 `python manage.py createsuperuser`
+
 
 > vi /var/www/html/uwsgi.ini
 ```
@@ -108,7 +109,7 @@ server {
 
 Run uWSGI in emperor mode.
 
-`mkdir -p /etc/uwsgi/vassals`
+`mkdir -p /etc/uwsgi/vassals`  
 `ln -s /var/www/html/uwsgi.ini /etc/uwsgi/vassals/`
 
 > vi /etc/systemd/system/uwsgi.service

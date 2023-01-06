@@ -1,15 +1,17 @@
 # wagtail-ansible-terraform
 
-Automating Wagtail CMS installation using Ansible &amp; Terraform.  
+[Automating Wagtail CMS installation](/Server.md) using Ansible &amp; Terraform.  
 
-## Create and activate a virtual environment  
+## Local development setup
+
+### Create and activate a virtual environment  
 
 To isolate dependencies from other projects create virtual environment.  
 
 `python3 -m venv venv`  
 `source venv/bin/activate`  
 
-## Install Wagtail
+### Install Wagtail
 
 `pip install wagtail`   
 `wagtail start cms`  
@@ -17,3 +19,4 @@ To isolate dependencies from other projects create virtual environment.
 `python3 manage.py migrate`  
 `python3 manage.py createsuperuser`  
 `python3 manage.py runserver`  
+

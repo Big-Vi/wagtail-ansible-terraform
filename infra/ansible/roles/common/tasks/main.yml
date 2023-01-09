@@ -1,0 +1,14 @@
+---
+  - name: OS update
+    shell: |
+      apt-get update
+      sed -i "s/#\$nrconf{restart} = 'i';/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
+      apt-get -y upgrade
+  - name: Install Python packages
+    apt:
+      name:
+        - build-essential
+        - python3-dev 
+        - python3-virtualenv 
+        - python3-pip
+      state: present

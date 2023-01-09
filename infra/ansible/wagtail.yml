@@ -1,0 +1,6 @@
+---
+  - name: Wagtail CMS Playbook
+    hosts: web-server
+    become: yes
+    roles:
+      - common

@@ -20,3 +20,5 @@ To isolate dependencies from other projects create virtual environment.
 `python3 manage.py createsuperuser`  
 `python3 manage.py runserver`  
 
+## Ansible
+`ansible-galaxy init /infra/ansible/roles/common`

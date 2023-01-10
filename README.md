@@ -22,3 +22,4 @@ To isolate dependencies from other projects create virtual environment.
 
 ## Ansible
 `ansible-galaxy init /infra/ansible/roles/common`
+`ansible-galaxy init /infra/ansible/roles/nginx`

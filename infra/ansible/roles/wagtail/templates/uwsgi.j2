@@ -1,0 +1,19 @@
+[uwsgi]
+
+chdir = /var/www/html/
+
+module = cms.wsgi
+
+processes = 1
+
+master = false
+
+vacuum = true
+
+socket = /var/www/html/cms.sock
+
+chmod-socket = 666
+
+die-on-term = true
+
+env = DJANGO_SETTINGS_MODULE=cms.settings.dev

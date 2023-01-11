@@ -1,0 +1,56 @@
+---
+  - name: Copy the code from repository
+    git: repo={{ repository }} dest=/var/www/html/  force=yes
+
+  - name: Install specified python requirements in indicated (virtualenv)
+    pip:
+      requirements: /var/www/html/requirements.txt
+      virtualenv: /var/www/html/env
+     
+  - name: Migrate db
+    command: "/var/www/html/env/bin/python3 manage.py migrate"
+    register: migration
+    args:
+      chdir: "/var/www/html/"
+
+  - name: Create static files
+    command: "/var/www/html/env/bin/python3 manage.py collectstatic"
+    args:
+      chdir: "/var/www/html/"
+
+  - name: Create uWSGI config
+    template: src=uwsgi.j2 dest=/var/www/html/uwsgi.ini
+    register: wsgi_config
+    notify:
+      - nginx-restart
+
+  - name: Create dir for vassals for emperor mode
+    shell: mkdir -p /etc/uwsgi/vassals/
+
+  - name: Create symbolic link of uwsgi.ini file
+    shell: "ln -sf /var/www/html/uwsgi.ini /etc/uwsgi/vassals/"
+    notify:
+      - nginx-restart
+
+  - name: Setup systemd service
+    template:
+      src: uwsgi.service.j2
+      dest: "/etc/systemd/system/uwsgi.service"
+      owner: root
+      group: root
+      mode: 0644
+    register: wsgi_service
+    notify:
+      - nginx-restart
+      - daemon-reload
+
+  - name: Restart uWSGI service
+    systemd: 
+      name: "uwsgi.service"
+      state: started
+
+  - name: Start wsgi service & enable it.
+    systemd: 
+      name: "uwsgi.service"
+      enabled: yes
+

@@ -23,3 +23,6 @@ To isolate dependencies from other projects create virtual environment.
 ## Ansible
 `ansible-galaxy init /infra/ansible/roles/common`
 `ansible-galaxy init /infra/ansible/roles/nginx`
+`ansible-galaxy init /infra/ansible/roles/wagtail`
+
+`ansible-playbook -i infra/ansible/inventory infra/ansible/wagtail.yml`

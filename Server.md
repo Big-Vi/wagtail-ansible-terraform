@@ -30,6 +30,7 @@ Activate virtualenv
 Inline DB until it replaced with AWS RDS
 
 `python manage.py migrate`  
+`python manage.py collectstatic`
 `python manage.py createsuperuser`
 
 

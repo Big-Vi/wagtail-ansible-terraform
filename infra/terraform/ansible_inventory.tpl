@@ -1,0 +1,1 @@
+web-server ansible_host=${webserver_ip} ansible_user=${ssh_user} ansible_ssh_private_key_file=~/2022-05.pem repository=https://github.com/Big-Vi/wagtail-ansible-terraform.git

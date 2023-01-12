@@ -15,5 +15,5 @@ data "template_file" "ansible_inventory" {
 # Generate inventory file
 resource "local_file" "ansible_inventory" {
   content = data.template_file.ansible_inventory.rendered
-  filename = "output/ansible_inventory"
+  filename = "../ansible/inventory"
 }

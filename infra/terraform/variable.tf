@@ -4,10 +4,10 @@ variable "ec2_name" {
   description = "Name the instance on deploy"
 }
 
-variable "profile" {
-  description = "profile for deploy"
-  default     = "default"
-}
+# variable "profile" {
+#   description = "profile for deploy"
+#   default     = "default"
+# }
 
 variable "instance_type" {
   description = "EC2 instance type"

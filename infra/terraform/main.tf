@@ -7,11 +7,19 @@ terraform {
       version = "~> 4.49.0"
     }
   }
+
+  cloud {
+    organization = "Big-V"
+
+    workspaces {
+      name = "Wagtail-Terraform"
+    }
+  }
 }
 
 provider "aws" {
   region  = "ap-southeast-2"
-  profile = var.profile
+  # profile = var.profile
 }
 
 data "aws_ami" "ubuntu" {

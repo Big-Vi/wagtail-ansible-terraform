@@ -25,7 +25,10 @@ data "aws_ami" "ubuntu" {
 }
 
 data "aws_vpc" "my_vpc" {
-  id = var.vpc_id
+  filter {
+    name = "tag:Name"
+    values = ["my-vpc"]
+  }
 }
 
 data "aws_subnet" "public_subnet" {

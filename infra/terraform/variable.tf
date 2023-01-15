@@ -9,8 +9,6 @@ variable "profile" {
   default     = "default"
 }
 
-variable "vpc_id" {}
-
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string

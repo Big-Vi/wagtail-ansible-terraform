@@ -80,7 +80,6 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2.6.1
         with:
           playbook: wagtail.yml
-          directory: ./
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           inventory: inventory
           known_hosts: .known_hosts

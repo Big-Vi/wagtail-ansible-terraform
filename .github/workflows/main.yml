@@ -72,9 +72,6 @@ jobs:
 
   deploy_code:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: infra/ansible
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -83,6 +80,7 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2.6.1
         with:
           playbook: wagtail.yml
+          directory: ./infra/ansible
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           inventory: inventory
           known_hosts: .known_hosts

@@ -8,17 +8,17 @@ terraform {
     }
   }
 
-  cloud {
-    organization = "Big-V"
-
-    workspaces {
-      name = "Wagtail-Terraform"
-    }
+  backend "s3" {
+    bucket         = "wagtail-tfstate"
+    key            = "tfstate-s3-bucket"
+    region         = "ap-southeast-2"
+    encrypt        = true
+    dynamodb_table = "terraform-state-lock-dynamodb"
   }
 }
 
 provider "aws" {
-  region = "ap-southeast-2"
+  region  = var.region
   # profile = var.profile
 }
 

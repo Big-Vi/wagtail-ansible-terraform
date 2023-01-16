@@ -4,6 +4,11 @@ variable "ec2_name" {
   description = "Name the instance on deploy"
 }
 
+variable "region" {
+  description = "AWS region"
+  default     = "ap-southeast-2"
+}
+
 # variable "profile" {
 #   description = "profile for deploy"
 #   default     = "default"

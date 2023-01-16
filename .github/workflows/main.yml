@@ -68,16 +68,11 @@ jobs:
       - name: Terraform Apply
         # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
-      
-      - shell: bash
-        run: |
-          value=`ls ../ansible`
 
       - name: Archive inventory file
         uses: actions/upload-artifact@v3
         with:
           name: inventory-file
-          path: infra/ansible/inventory
 
 
   deploy_code:

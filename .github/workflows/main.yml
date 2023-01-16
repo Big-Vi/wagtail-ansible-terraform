@@ -66,15 +66,28 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
+
+      - name: Archive inventory file
+        uses: actions/upload-artifact@v3
+        with:
+          name: inventory-file
+          path: infra/ansible/inventory
 
 
   deploy_code:
+    needs: terraform
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Download inventory file
+        uses: actions/download-artifact@v3
+        with:
+          name: inventory-file
+          path: infra/ansible/
 
       - name: Run Ansible playbook
         uses: dawidd6/action-ansible-playbook@v2.6.1

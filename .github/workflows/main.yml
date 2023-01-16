@@ -77,7 +77,7 @@ jobs:
       - name: Open Web Client Directory
         working-directory: infra/ansible
         run: |
-          ls -la
+          cat inventory
 
       - name: Run Ansible playbook
         uses: dawidd6/action-ansible-playbook@v2.6.1

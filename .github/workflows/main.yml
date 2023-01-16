@@ -74,6 +74,11 @@ jobs:
         # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
 
+      - name: Open Web Client Directory
+        working-directory: infra/ansible
+        run: |
+          ls -la
+
       - name: Run Ansible playbook
         uses: dawidd6/action-ansible-playbook@v2.6.1
         with:

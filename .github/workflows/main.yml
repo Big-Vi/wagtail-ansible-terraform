@@ -85,8 +85,8 @@ jobs:
           playbook: wagtail.yml
           directory: ./infra/ansible
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          inventory: inventory
-          known_hosts: .known_hosts
+          # inventory: inventory
+          # known_hosts: .known_hosts
 
       # - name: Archive inventory file
       #   uses: actions/upload-artifact@v3

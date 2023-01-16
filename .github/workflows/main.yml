@@ -74,11 +74,20 @@ jobs:
         # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
 
-      - name: Archive inventory file
-        uses: actions/upload-artifact@v3
+      - name: Run Ansible playbook
+        uses: dawidd6/action-ansible-playbook@v2.6.1
         with:
-          name: inventory-file
-          path: output/inventory
+          playbook: wagtail.yml
+          directory: ../infra/ansible
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          inventory: inventory
+          known_hosts: .known_hosts
+
+      # - name: Archive inventory file
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: inventory-file
+      #     path: output/inventory
 
 
   # deploy_code:

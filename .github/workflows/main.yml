@@ -7,7 +7,7 @@ on:
 jobs:
   terraform:
     name: "Create infrastructure"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04 #Using 20.04 version since installing python doesn't work.
     defaults:
       run:
         working-directory: infra/terraform
@@ -71,7 +71,7 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
 
       - name: Open Web Client Directory
@@ -79,39 +79,50 @@ jobs:
         run: |
           cat inventory
 
-      - name: Run Ansible playbook
-        uses: dawidd6/action-ansible-playbook@v2.6.1
+      - name: Archive inventory file
+        uses: actions/upload-artifact@v3
         with:
-          playbook: wagtail.yml
-          directory: ./infra/ansible
+          name: inventory-file
+          path: infra/ansible/inventory
+
+
+  deploy_code:
+    needs: terraform
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: infra/ansible
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download inventory file
+        uses: actions/download-artifact@v3
+        with:
+          name: inventory-file
+          path: infra/ansible/
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies Including Ansible
+        run: |
+          apt update
+          apt-get install -y python3-pip
+          python -m pip install --user ansible
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # inventory: inventory
-          # known_hosts: .known_hosts
+          name: id_rsa
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          if_key_exists: fail
 
-      # - name: Archive inventory file
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: inventory-file
-      #     path: output/inventory
+      - name: run playbook
+        working-directory: infra/ansible
+        run: |
+          /root/.local/bin/ansible-playbook -i inventory wagtail.yml
 
-
-  # deploy_code:
-  #   needs: terraform
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - name: Download inventory file
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: inventory-file
-
-  #     - name: Run Ansible playbook
-  #       uses: dawidd6/action-ansible-playbook@v2.6.1
-  #       with:
-  #         playbook: wagtail.yml
-  #         directory: ./infra/ansible
-  #         key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #         inventory: inventory
-  #         known_hosts: .known_hosts

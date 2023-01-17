@@ -121,5 +121,5 @@ jobs:
       - name: run playbook
         working-directory: infra/ansible
         run: |
-          /root/.local/bin/ansible-playbook -i inventory wagtail.yml
+          sudo /root/.local/bin/ansible-playbook -i inventory wagtail.yml
 

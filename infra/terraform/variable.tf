@@ -4,12 +4,15 @@ variable "ec2_name" {
   description = "Name the instance on deploy"
 }
 
-variable "profile" {
-  description = "profile for deploy"
-  default     = "default"
+variable "region" {
+  description = "AWS region"
+  default     = "ap-southeast-2"
 }
 
-variable "vpc_id" {}
+# variable "profile" {
+#   description = "profile for deploy"
+#   default     = "default"
+# }
 
 variable "instance_type" {
   description = "EC2 instance type"

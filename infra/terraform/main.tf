@@ -7,11 +7,19 @@ terraform {
       version = "~> 4.49.0"
     }
   }
+
+  backend "s3" {
+    bucket         = "wagtail-tfstate"
+    key            = "tfstate-s3-bucket"
+    region         = "ap-southeast-2"
+    encrypt        = true
+    dynamodb_table = "terraform-state-lock-dynamodb"
+  }
 }
 
 provider "aws" {
-  region  = "ap-southeast-2"
-  profile = var.profile
+  region = var.region
+  # profile = var.profile
 }
 
 data "aws_ami" "ubuntu" {

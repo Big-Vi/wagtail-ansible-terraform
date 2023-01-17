@@ -106,9 +106,9 @@ jobs:
 
       - name: Install dependencies Including Ansible
         run: |
-          apt update
-          apt-get install -y python3-pip
-          python -m pip install --user ansible
+          sudo apt update
+          sudo apt-get install -y python3-pip
+          sudo python -m pip install --user ansible
 
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2

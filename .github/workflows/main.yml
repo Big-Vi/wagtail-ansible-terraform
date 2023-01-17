@@ -74,12 +74,8 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
 
-      - name: Open Web Client Directory
-        working-directory: infra/ansible
-        run: |
-          cat inventory
-
       - name: Archive inventory file
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-artifact@v3
         with:
           name: inventory-file
@@ -88,6 +84,7 @@ jobs:
 
   deploy_code:
     needs: terraform
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-20.04
     defaults:
       run:

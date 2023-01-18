@@ -107,19 +107,20 @@ jobs:
       - name: Install dependencies Including Ansible
         run: |
           sudo apt update
-          sudo apt-get install -y python3-pip
-          sudo python -m pip install --user ansible
+          sudo apt install software-properties-common
+          sudo apt-add-repository --yes --update ppa:ansible/ansible
+          sudo apt install -y ansible
 
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          name: id_rsa
+          name: id_rsa-key
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
           if_key_exists: fail
 
       - name: run playbook
         working-directory: infra/ansible
         run: |
-          sudo /root/.local/bin/ansible-playbook -i inventory wagtail.yml
+          ansible-playbook -i inventory wagtail.yml
 

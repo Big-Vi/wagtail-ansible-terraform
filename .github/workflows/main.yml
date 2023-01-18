@@ -1,7 +1,7 @@
 name: Deploy
 on:
   push:
-    branches: [ develop ]
+    branches: [ main ]
   pull_request:
  
 jobs:
@@ -71,11 +71,11 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
 
       - name: Archive inventory file
-        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-artifact@v3
         with:
           name: inventory-file
@@ -84,7 +84,7 @@ jobs:
 
   deploy_code:
     needs: terraform
-    # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-20.04
     defaults:
       run:

@@ -2,11 +2,23 @@
   - name: Copy the code from repository
     git: repo={{ repository }} dest=/var/www/html/  force=yes
 
+  - name: Provide permission to the user so that assets can be created.
+    file:
+      path: "/var/www/html"
+      recurse: yes
+      owner: "ubuntu"
+      group: www-data
+      mode: ug=rwx,o=
+
+  - name: Copy production.py
+    become: false
+    template: src=production.j2 dest=/var/www/html/cms/settings/production.py
+
   - name: Install specified python requirements in indicated (virtualenv)
     pip:
       requirements: /var/www/html/requirements.txt
       virtualenv: /var/www/html/env
-     
+
   - name: Migrate db
     command: "/var/www/html/env/bin/python3 manage.py migrate"
     register: migration
@@ -14,7 +26,7 @@
       chdir: "/var/www/html/"
 
   - name: Create static files
-    command: "/var/www/html/env/bin/python3 manage.py collectstatic"
+    command: "/var/www/html/env/bin/python3 manage.py collectstatic --noinput"
     args:
       chdir: "/var/www/html/"
 

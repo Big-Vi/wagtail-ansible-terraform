@@ -93,7 +93,7 @@ resource "aws_security_group" "webserver_sg" {
 resource "aws_instance" "webserver" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
-  key_name                    = "2022-05"
+  key_name                    = "aws_key_p"
   associate_public_ip_address = true
   subnet_id                   = data.aws_subnet.public_subnet.id
 

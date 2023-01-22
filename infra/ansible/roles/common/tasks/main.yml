@@ -9,6 +9,7 @@
       name:
         - build-essential
         - python3-dev 
+        - libpq-dev
         - python3-virtualenv 
         - python3-pip
       state: present

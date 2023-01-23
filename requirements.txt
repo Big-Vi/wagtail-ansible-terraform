@@ -4,3 +4,4 @@ uwsgi
 psycopg2-binary
 psycopg2
 python-dotenv
+aws-secretsmanager-caching

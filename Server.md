@@ -9,7 +9,7 @@ To prevent interruption of scripts, needrestart setting needs to be changed to a
 
 `apt-get -y upgrade`
 
-`apt-get install -y build-essential python3-dev python3-virtualenv python3-pip nginx`
+`apt-get install -y build-essential python3-dev libpq-dev python3-virtualenv python3-pip nginx`
 
 `rm -rf /var/www/html/`
 
@@ -25,13 +25,12 @@ Activate virtualenv
 
 `pip install -r requirements.txt`
 
-  
-  
-Inline DB until it replaced with AWS RDS
+`sudo chown ubuntu:www-data -R html`
+`chmod -R 770 html/`
 
 `python manage.py migrate`  
-`python manage.py collectstatic`
-`python manage.py createsuperuser`
+`python manage.py collectstatic --noinput`
+`python manage.py createsuperuser --noinput`
 
 
 > vi /var/www/html/uwsgi.ini

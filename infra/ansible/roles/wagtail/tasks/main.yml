@@ -19,14 +19,24 @@
       requirements: /var/www/html/requirements.txt
       virtualenv: /var/www/html/env
 
+  - name: run env.py script
+    script:
+        executable: /var/www/html/env/bin/python3
+        cmd: env.py
+
   - name: Migrate db
-    command: "/var/www/html/env/bin/python3 manage.py migrate"
+    command: "env/bin/python3 manage.py migrate"
     register: migration
     args:
       chdir: "/var/www/html/"
 
   - name: Create static files
-    command: "/var/www/html/env/bin/python3 manage.py collectstatic --noinput"
+    command: "env/bin/python3 manage.py collectstatic --noinput"
+    args:
+      chdir: "/var/www/html/"
+
+  - name: Create super user with values set in .env file
+    command: "env/bin/python3 manage.py createsuperuser --noinput"
     args:
       chdir: "/var/www/html/"
 

@@ -40,7 +40,7 @@ data "aws_vpc" "my_vpc" {
 }
 
 data "aws_subnet" "public_subnet" {
-  for_each = toset(var.public_subnets)
+  for_each   = toset(var.public_subnets)
   vpc_id     = data.aws_vpc.my_vpc.id
   cidr_block = each.key
 }
@@ -98,10 +98,11 @@ resource "random_password" "db_password" {
 
 resource "random_password" "wagtail_secret" {
   length  = 50
+  special = false
 }
 
 resource "random_password" "wagtail_pw" {
-  length  = 16
+  length = 16
 }
 
 resource "aws_security_group" "rds" {
@@ -113,9 +114,9 @@ resource "aws_security_group" "rds" {
   }
 
   ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
+    from_port = 5432
+    to_port   = 5432
+    protocol  = "tcp"
     security_groups = [
       "${aws_security_group.webserver_sg.id}",
     ]
@@ -155,7 +156,7 @@ resource "aws_db_instance" "wagtaildb" {
   engine                 = "postgres"
   engine_version         = "14.5"
   username               = "postgres"
-  db_name                = "wagtail_db" 
+  db_name                = "wagtail_db"
   password               = random_password.db_password.result
   db_subnet_group_name   = aws_db_subnet_group.wagtaildb.name
   vpc_security_group_ids = [aws_security_group.rds.id]
@@ -165,7 +166,7 @@ resource "aws_db_instance" "wagtaildb" {
 }
 
 resource "aws_secretsmanager_secret" "rds_cred" {
-  name = "test/wagtailcms"
+  name = "dev/wagtailcms"
 }
 
 resource "aws_secretsmanager_secret_version" "rds_cred" {
@@ -185,12 +186,40 @@ resource "aws_secretsmanager_secret_version" "rds_cred" {
   EOF
 }
 
+data "aws_iam_policy" "wagtail_secret_policy" {
+  arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+}
+resource "aws_iam_role" "wagtail_secret_role" {
+  name                = "SecretsManagerReadWrite"
+  assume_role_policy  = <<EOF
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": "sts:AssumeRole",
+        "Principal": {
+          "Service": "ec2.amazonaws.com"
+        },
+        "Effect": "Allow",
+        "Sid": ""
+      }
+    ]
+    }
+    EOF
+  managed_policy_arns = [data.aws_iam_policy.wagtail_secret_policy.arn]
+}
+resource "aws_iam_instance_profile" "wagtail_instance_profile" {
+  name = "wagtail_instance_profile"
+  role = aws_iam_role.wagtail_secret_role.name
+}
+
 resource "aws_instance" "webserver" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = "aws_key_p"
   associate_public_ip_address = true
   subnet_id                   = data.aws_subnet.public_subnet[var.public_subnets[0]].id
+  iam_instance_profile        = aws_iam_instance_profile.wagtail_instance_profile.name
 
   vpc_security_group_ids = [aws_security_group.webserver_sg.id]
   tags = {

@@ -11,7 +11,7 @@ variable "region" {
 
 variable "public_subnets" {
   description = "VPC's public subnets list"
-  default = ["192.168.0.0/20", "192.168.16.0/20"]
+  default     = ["192.168.0.0/20", "192.168.16.0/20"]
 }
 
 # variable "profile" {

@@ -5,6 +5,7 @@
 *.swp
 *.retry
 .env
+.secrets
 .idea
 .vscode
 *~
